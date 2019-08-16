@@ -170,12 +170,14 @@ struct MachineClass {
     void (*wakeup)(MachineState *state);
     int (*kvm_type)(MachineState *machine, const char *arg);
     void (*smp_parse)(MachineState *ms, QemuOpts *opts);
+    int (*vcpu_parse)(MachineState *ms, QemuOpts *opts);
 
     BlockInterfaceType block_default_type;
     int units_per_default_bus;
     int max_cpus;
     int min_cpus;
     int default_cpus;
+    int vcpu_affinity[CPU_SETSIZE];
     unsigned int no_serial:1,
         no_parallel:1,
         no_floppy:1,

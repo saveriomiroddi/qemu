@@ -761,6 +761,34 @@ static void smp_parse(MachineState *ms, QemuOpts *opts)
     }
 }
 
+static int vcpu_parse(MachineState *ms, QemuOpts *opts)
+{
+    MachineClass *mc = MACHINE_GET_CLASS(ms);
+
+    int num_affinity = 0;
+
+    if (opts) {
+        unsigned vcpu = qemu_opt_get_number(opts, "vcpunum", 0);
+        unsigned affinity = qemu_opt_get_number(opts,"affinity", 0);
+
+        if (vcpu < ms->smp.cpus * ms->smp.cores * ms->smp.threads) {
+            if (mc->vcpu_affinity[vcpu] == -1) {
+                mc->vcpu_affinity[vcpu] = affinity;
+            }
+            else {
+                error_report("Duplicate affinity statement for vcpu %d\n", vcpu);
+                return -1;
+            }
+            num_affinity += 1;
+        }
+        else {
+            error_report("VCPU %d is more than allowed %d VCPUs in the system\n", vcpu, ms->smp.cores);
+            return -1;
+        }
+    }
+    return 0;
+}
+
 static void machine_class_init(ObjectClass *oc, void *data)
 {
     MachineClass *mc = MACHINE_CLASS(oc);
@@ -769,6 +797,10 @@ static void machine_class_init(ObjectClass *oc, void *data)
     mc->default_ram_size = 128 * MiB;
     mc->rom_file_has_mr = true;
     mc->smp_parse = smp_parse;
+    mc->vcpu_parse = vcpu_parse;
+
+    for (int i = 0; i < CPU_SETSIZE; i++)
+        mc->vcpu_affinity[i] = -1;
 
     /* numa node memory size aligned on 8MB by default.
      * On Linux, each node's border has to be 8MB aligned

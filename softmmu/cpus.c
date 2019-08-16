@@ -602,7 +602,9 @@ void cpus_register_accel(const CpusAccel *ca)
 
 void qemu_init_vcpu(CPUState *cpu)
 {
+    cpu_set_t cpuset;
     MachineState *ms = MACHINE(qdev_get_machine());
+    MachineClass *mc = MACHINE_GET_CLASS(ms);
 
     cpu->nr_cores = ms->smp.cores;
     cpu->nr_threads =  ms->smp.threads;
@@ -620,6 +622,12 @@ void qemu_init_vcpu(CPUState *cpu)
     /* accelerators all implement the CpusAccel interface */
     g_assert(cpus_accel != NULL && cpus_accel->create_vcpu_thread != NULL);
     cpus_accel->create_vcpu_thread(cpu);
+
+    if (mc->vcpu_affinity[cpu->cpu_index] != -1) {
+        CPU_ZERO(&cpuset);
+        CPU_SET(mc->vcpu_affinity[cpu->cpu_index], &cpuset);
+        pthread_setaffinity_np((cpu->thread)->thread, sizeof(cpu_set_t), &cpuset);
+    }
 
     while (!cpu->created) {
         qemu_cond_wait(&qemu_cpu_cond, &qemu_global_mutex);

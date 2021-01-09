@@ -46,17 +46,17 @@ function install_dependencies {
     ;;
   esac
 
-  v_packages_to_install=""
+  v_packages_to_install=()
 
   for package in $c_required_packages; do
     if [[ ! $(dpkg -s "$package" 2> /dev/null) ]]; then
-      v_packages_to_install+=" $package"
+      v_packages_to_install+=("$package")
     fi
   done
 
-  if [[ "$v_packages_to_install" != "" ]]; then
+  if [[ ${#v_packages_to_install[@]} -gt 0 ]]; then
     echo
-    sudo "$package_manager_binary" install $v_packages_to_install
+    sudo "$package_manager_binary" install "${v_packages_to_install[@]}"
   fi
 
   echo

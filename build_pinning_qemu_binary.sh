@@ -65,14 +65,14 @@ function install_dependencies {
 function compile_project {
   # Using a higher number of jobs, on an i7-6700k, didn't produce any significant improvement,
   # but YMMV.
-  THREADS_NUMBER=$(lscpu --all -p=CPU | grep -v ^# | sort | uniq | wc -l)
+  threads_number=$(nproc)
 
   rm -rf bin
   mkdir -p bin/debug/native
 
   cd bin/debug/native
   ../../../configure --target-list=x86_64-softmmu --enable-gtk --enable-spice --audio-drv-list=pa
-  time make -j $THREADS_NUMBER
+  time make -j "$threads_number"
   cd -
 
   echo

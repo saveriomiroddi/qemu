@@ -8,14 +8,17 @@ shopt -s inherit_errexit
 
 v_architecture="x86_64"
 v_enable_prompts=1 # empty for disabling
+v_build_gui_modules=1 # empty for disabling
 
-c_help="Usage: $(basename "$0") [-h|--help] [(--t|--target)=arch] [-y|--yes]
+c_help="Usage: $(basename "$0") [-h|--help] [(--t|--target)=arch] [-H|--headless] [-y|--yes]
 
 QEMU-pinning helper script.
 
 The default target architecture is '$v_architecture'; use \`--target\` to customize. Other options: \`riscv64\`, etc.
 
 The directory \`bin\` is _not_cleaned; if the build has any issue, try \`rm -rf bin\`.
+
+Specify \`--headless\` not to build the audio/video modules (gtk, spice, pulseaudio). For simplicity, the packages are installed regardless.
 
 Specify \`--yes\` to disable prompts.
 
@@ -40,7 +43,7 @@ function show_prompt {
 }
 
 function decode_cmdline_params {
-  eval set -- "$(getopt --options ht:y --long help,target:,yes --name "$(basename "$0")" -- "$@")"
+  eval set -- "$(getopt --options ht:Hy --long help,target:,headless,yes --name "$(basename "$0")" -- "$@")"
 
   while true ; do
     case "$1" in
@@ -50,6 +53,9 @@ function decode_cmdline_params {
       -t|--target)
         v_architecture="$2"
         shift 2 ;;
+      -H|--headless)
+        v_build_gui_modules=
+        shift ;;
       -y|--yes)
         v_enable_prompts=
         shift ;;
@@ -124,8 +130,16 @@ function compile_project {
   mkdir -p bin/debug/native
 
   cd bin/debug/native
-  ../../../configure --target-list="$v_architecture-softmmu" --enable-gtk --enable-spice --audio-drv-list=pa
+
+  gui_package_options=()
+
+  if [[ -n $v_build_gui_modules ]]; then
+    gui_package_options=(--enable-gtk --enable-spice --audio-drv-list=pa)
+  fi
+
+  ../../../configure --target-list="$v_architecture-softmmu" "${gui_package_options[@]}"
   time make -j "$threads_number"
+
   cd - > /dev/null
 }
 

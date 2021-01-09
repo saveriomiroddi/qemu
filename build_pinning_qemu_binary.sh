@@ -1,6 +1,10 @@
 #!/bin/bash
 
+set -o pipefail
 set -o errexit
+set -o nounset
+set -o errtrace
+shopt -s inherit_errexit
 
 c_binary="bin/debug/native/x86_64-softmmu/qemu-system-x86_64"
 

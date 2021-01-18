@@ -91,11 +91,11 @@ function install_dependencies {
 
   case $os_id in
   ubuntu|debian|linuxmint)
-    c_required_packages="ninja-build flex libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libgtk-3-dev libpulse-dev libusb-1.0-0-dev libusbredirparser-dev libspice-protocol-dev libspice-server-dev"
+    c_required_packages="ninja-build flex libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libgtk-3-dev libpulse-dev libusb-1.0-0-dev libusbredirparser-dev libspice-protocol-dev libspice-server-dev libcapstone-dev"
     package_manager_binary=apt-get
     ;;
   fedora|rhel)
-    c_required_packages="ninja-build flex libusbx-devel spice-server-devel pulseaudio-libs-devel git gtk3-devel glib2-devel libfdt-devel pixman-devel zlib-devel libaio-devel libcap-devel libiscsi-devel"
+    c_required_packages="ninja-build flex libusbx-devel spice-server-devel pulseaudio-libs-devel git gtk3-devel glib2-devel libfdt-devel pixman-devel zlib-devel libaio-devel libcap-devel libiscsi-devel capstone-devel"
     package_manager_binary=yum
     ;;
   *)

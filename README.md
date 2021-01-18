@@ -140,11 +140,20 @@ This patch should also support sockets, but it can't be tested on my machine(s).
 
 ## Repository (git) structure
 
-The master branch is always the latest QEMU release version (generally, with a lag of a few days, unless there are specific issues).
+The master branch is always the latest QEMU release version (generally, with a lag of a few days, unless there are specific issues), with the latest version of the pinning patch and build script.
 
-The HEAD commit is the pinning patch, and HEAD~ contains the `README.md` and `build_pinning_qemu_binary.sh` (plus, updates to `.gitignore`).
+The top 3 master commits are (in order from head):
 
-I provide branches for past versions, and for the current version (which matches `master`); they're named `vx.x.x-pinning`, and have the same structure; therefore, in order to build an older version, just checkout the branch and run the build script.
+0. pinning patch
+1. building script; `README.md`; gitignore update
+2. allow symlinks in Samba shares patch
+
+The repository contains two lines of branches:
+
+- `vX.Y.Z-pinning`: snaphots of previous QEMU versions, with the above commits applied
+- `vX.Y.Z-pinning-changes`: version equivalent to `vX.Y.Z-pinning`, with minor changes separated (since the `master` structure is rigid, without this line, the history would be lost)
+
+Only the `master` and the latest `-changes` branch are actively developed (both correspond to the latest QEMU version). There are no guarantees about updates to old version branches.
 
 ## Why not libvirt?
 

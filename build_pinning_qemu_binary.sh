@@ -137,26 +137,30 @@ function compile_project {
     gui_package_options=(--enable-gtk --enable-spice --audio-drv-list=pa)
   fi
 
-  ../../../configure --target-list="$v_architecture-softmmu" "${gui_package_options[@]}"
+  ../../../configure --target-list="$v_architecture-softmmu,$v_architecture-linux-user" "${gui_package_options[@]}"
   time make -j "$threads_number"
 
   cd - > /dev/null
 }
 
 function print_outro {
-  built_binary=$(readlink -f "bin/debug/native/qemu-system-$v_architecture")
+  system_emu_built_binary=$(readlink -f "bin/debug/native/qemu-system-$v_architecture")
+  user_emu_built_binary=$(readlink -f "bin/debug/native/qemu-$v_architecture")
 
-  echo
-  echo 'The project is built!'
-  echo
-  echo "The binary location is: $built_binary"
-  echo
-  echo "Test execution result:"
-  echo
+  echo "
+The project is built!
 
-  "$built_binary" --version
+The binary locations are:
 
-  echo
+- $system_emu_built_binary -> full system emulator
+- $user_emu_built_binary -> only executes binaries
+
+Test execution results:
+
+$("$system_emu_built_binary" --version)
+
+$("$user_emu_built_binary" --version)
+"
 }
 
 decode_cmdline_params "$@"

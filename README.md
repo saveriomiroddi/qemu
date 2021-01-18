@@ -28,7 +28,7 @@ From the project root, run:
 ./build_pinning_qemu_binary.sh
 ```
 
-The project will be built, and display the binary location.
+The project will be built, and display the locations of the binaries (system/user emulators).
 
 A few important notes:
 

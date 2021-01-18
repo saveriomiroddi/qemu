@@ -144,7 +144,7 @@ function compile_project {
 }
 
 function print_outro {
-  built_binary=$(readlink -f "bin/debug/native/$v_architecture-softmmu/qemu-system-$v_architecture")
+  built_binary=$(readlink -f "bin/debug/native/qemu-system-$v_architecture")
 
   echo
   echo 'The project is built!'

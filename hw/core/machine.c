@@ -771,7 +771,7 @@ static int vcpu_parse(MachineState *ms, QemuOpts *opts)
         unsigned vcpu = qemu_opt_get_number(opts, "vcpunum", 0);
         unsigned affinity = qemu_opt_get_number(opts,"affinity", 0);
 
-        if (vcpu < ms->smp.cpus * ms->smp.cores * ms->smp.threads) {
+        if (vcpu < ms->smp.max_cpus) {
             if (mc->vcpu_affinity[vcpu] == -1) {
                 mc->vcpu_affinity[vcpu] = affinity;
             }
@@ -782,7 +782,7 @@ static int vcpu_parse(MachineState *ms, QemuOpts *opts)
             num_affinity += 1;
         }
         else {
-            error_report("VCPU %d is more than allowed %d VCPUs in the system\n", vcpu, ms->smp.cores);
+            error_report("VCPU %d exceeds maximum allowed (%d)\n", vcpu, ms->smp.max_cpus);
             return -1;
         }
     }

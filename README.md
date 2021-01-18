@@ -2,16 +2,15 @@
 
 Fork of QEMU, with support for pinning virtual cpus/cores/threads to the physical counterparts.
 
-## Table of contents
-
-- [Patch notes](#patch-notes)
-- [Building the project (including QEMU binary)](#building-the-project-including-qemu-binary)
-  - [Generic execution](#generic-execution)
-  - [More advanced execution](#more-advanced-execution)
-  - [Verifying the pinning](#verifying-the-pinning)
-  - [Multi-socket CPUs](#multi-socket-cpus)
-- [Repository (git) structure](#repository-git-structure)
-- [Why not libvirt?](#why-not-libvirt)
+- [QEMU-Pinning: QEMU fork with pinning (affinity) support](#qemu-pinning-qemu-fork-with-pinning-affinity-support)
+  - [Patch notes](#patch-notes)
+  - [Building the project (including QEMU binary)](#building-the-project-including-qemu-binary)
+    - [Generic execution](#generic-execution)
+    - [More advanced execution](#more-advanced-execution)
+    - [Verifying the pinning](#verifying-the-pinning)
+    - [Multi-socket CPUs](#multi-socket-cpus)
+  - [Repository (git) structure](#repository-git-structure)
+  - [Why not libvirt?](#why-not-libvirt)
 
 ## Patch notes
 

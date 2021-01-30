@@ -118,7 +118,7 @@ function install_dependencies {
 "
     show_prompt
 
-    sudo "$package_manager_binary" install "${v_packages_to_install[@]}"
+    sudo "$package_manager_binary" install -y "${v_packages_to_install[@]}"
   fi
 }
 
